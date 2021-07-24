@@ -1,8 +1,8 @@
 {
-  "name": "Start on Heroku: Node.js",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/main/public/node.svg",
-  "keywords": ["node", "express", "heroku"],
+  "name": "Lex Channel - Kodi",
+  "description": "",
+  "repository": "",
+  "logo": "",
+  "keywords": ["node", "express", "heroku", "torino"],
   "image": "heroku/nodejs"
 }
