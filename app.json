@@ -1,8 +1,8 @@
 {
-  "name": "Lex Channel - Kodi",
+  "name": "KOD Community Channels by 4l3x87",
   "description": "",
   "repository": "",
   "logo": "",
-  "keywords": ["node", "express", "heroku", "torino"],
+  "keywords": ["node", "express", "heroku", "torino channel"],
   "image": "heroku/nodejs"
 }

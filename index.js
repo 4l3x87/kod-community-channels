@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 app.get('/', (req, res) => {
     let base_url = req.protocol + '://' + req.get('host');
     res.json({
-        list_name: 'Lex KOD Community Channels',
+        name: 'KOD Community Channels by 4l3x87',
         channels: [
             {
                 title: 'Torino Channel',
