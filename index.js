@@ -55,7 +55,7 @@ app.get('/torino-channel', (req, res) => {
 
                 if (href.match(/diretta\-live/)) {
                     channel.menu.unshift({
-                        title: $(el).text(),
+                        title: $(el).text().trim(),
                         videolibrary: false,
                         autoplay: true,
                         links: [
@@ -66,7 +66,7 @@ app.get('/torino-channel', (req, res) => {
                     })
                 } else {
                     channel.menu.push({
-                        title: $(el).text(),
+                        title: $(el).text().trim(),
                         link: channel_base_url + '/?u=' + href
                     })
                 }
@@ -88,7 +88,7 @@ app.get('/torino-channel', (req, res) => {
                 let image = $(el).find('.video-img picture > img').data('src');
                 let videoUrl = $(el).find('.video-img a').attr('href');
                 list.generic_list.push({
-                    title: $(el).find('.vetrina-home-title > h2').text(),
+                    title: $(el).find('.vetrina-home-title > h2').text().trim(),
                     fanart: image ? request_base_url + image : undefined,
                     thumbnail: image ? request_base_url + image : undefined,
                     videolibrary: false,
@@ -107,7 +107,7 @@ app.get('/torino-channel', (req, res) => {
                     let image = $(el).find('.teaser-video-img picture > img').data('src');
                     let videoUrl = $(el).find('.teaser-video-img a').attr('href');
                     list.generic_list.push({
-                        title: $(el).find('.teaser-video-title > h2').text(),
+                        title: $(el).find('.teaser-video-title > h2').text().trim(),
                         fanart: image ? request_base_url + image : undefined,
                         thumbnail: image ? request_base_url + image : undefined,
                         videolibrary: false,
