@@ -59,7 +59,7 @@ app.get('/torino-channel', (req, res) => {
                         videolibrary: false,
                         autoplay: true,
                         patterns: [
-                            "^(?:https?:\\/\\/).\\S+.m3u8$"
+                            "^(?:https?://).\\S+.m3u8$"
                         ],
                         links: [
                             {
@@ -97,7 +97,7 @@ app.get('/torino-channel', (req, res) => {
                     videolibrary: false,
                     autoplay: true,
                     patterns: [
-                        "^(?:https?:\\/\\/).\\S+.m3u8$"
+                        "^(?:https?://).\\S+.m3u8$"
                     ],
                     links: [
                         {
