@@ -93,6 +93,9 @@ app.get('/torino-channel', (req, res) => {
                     thumbnail: image ? request_base_url + image : undefined,
                     videolibrary: false,
                     autoplay: true,
+                    patterns: [
+                        "^(?:https?:\\/\\/).\\S+.m3u8$"
+                    ],
                     links: [
                         {
                             url: videoUrl
