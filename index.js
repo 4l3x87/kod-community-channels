@@ -58,6 +58,9 @@ app.get('/torino-channel', (req, res) => {
                         title: $(el).text().trim(),
                         videolibrary: false,
                         autoplay: true,
+                        patterns: [
+                            "^(?:https?:\\/\\/).\\S+.m3u8$"
+                        ],
                         links: [
                             {
                                 url: request_base_url + href
