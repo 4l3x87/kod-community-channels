@@ -132,6 +132,7 @@ app.get('/fastsubita', async (req, res) => {
         }).forEach(item => {
             let listItem = {
                 title: item.serie + " " + item.season + "x" + item.episode,
+                videolibrary: false,
                 find_links: []
             }
 
