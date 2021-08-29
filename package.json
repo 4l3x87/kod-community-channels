@@ -1,6 +1,6 @@
 {
-  "name": "KOD Community Channels by 4l3x87",
-  "version": "0.3.0",
+  "name": "kod-community-channel",
+  "version": "0.0.1",
   "description": "",
   "engines": {
     "node": "14.x"
