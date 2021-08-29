@@ -13,3 +13,5 @@ Dockerfile
 docker-compose.yml
 
 package-lock.json
+storage/*
+!storage/.gitkeep

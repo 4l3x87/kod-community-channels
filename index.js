@@ -3,14 +3,98 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 const request = require('request')
 const cheerio = require('cheerio')
+const fs = require("fs");
 
 const request_base_url = 'https://tv.torinofc.it';
 const app = express()
     .use(express.static(path.join(__dirname, 'public')))
+    .use(express.json())
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`))
+
+app.post('/fastsubita', async (req, res) => {
+    let data = []
+    try {
+        req.body.forEach(item => {
+            // console.log(item)
+            if (item._ == 'message') {
+                item.message = item.message.replace(/ \n/g, '\n')
+                item.message = item.message.replace(/\n\n\nhttp/g, '\nhttp')
+                item.message = item.message.replace(/\n\nhttp/g, '\nhttp')
+                item.message.split("\n\n").forEach(message => {
+                    if (message.match(/https?:\/\//)) {
+                        // console.log(message)
+
+                        const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/im);
+                        const found = message.match(regex)
+                        // console.log(found)
+                        if (found) {
+                            const links = message.matchAll(new RegExp(/^(https?:\/\/\S*)$/img))
+                            if (links) {
+                                let episode = {
+                                    message_id: item.id,
+                                    message_date: item.date,
+                                    serie: found.groups['serie'],
+                                    season: found.groups['season'],
+                                    episode: found.groups['episode'],
+                                    title: found.groups['title'] ? found.groups['title'] : null,
+                                    links: []
+                                }
+                                for (const link of links) {
+                                    episode.links.push(link[0])
+                                }
+                                data.push(episode)
+                            }
+                        } else {
+                            // console.log(item)
+                        }
+
+                    }
+                })
+            }
+
+        })
+
+    } catch (e) {
+        // console.log(e)
+    }
+    // console.log(data)
+
+
+    let status = data.length > 0;
+    if (status) {
+        let items = []
+        let d = new Date()
+        const lastTime = d.setMonth(d.getMonth() - 2)
+        try {
+            const readFile = await readDb('storage/fastsubita.db.json');
+            items = JSON.parse(readFile)
+        } catch (err) {
+            console.log("file not found so making a empty one and adding default value " + err)
+        }
+
+        items = items.concat(data)
+        items = [...new Map(items.map(item => [item.message_id, item])).values()]
+            .sort((a, b) => {
+                if (a.message_date > b.message_date) return 1
+                if (a.message_date === b.message_date) return 0
+                if (a.message_date < b.message_date) return -1
+            })
+        items.filter(item => item.message_date >= lastTime)
+        try {
+            await writeFile(items, 'storage/fastsubita.db.json')
+        } catch (err) {
+            console.log("error, couldnt save to file " + err)
+        }
+    }
+
+    res.json({
+        status: status,
+        data: data
+    })
+})
 
 app.get('/', (req, res) => {
     let base_url = req.protocol + '://' + req.get('host');
@@ -20,9 +104,48 @@ app.get('/', (req, res) => {
             {
                 title: 'Torino Channel',
                 link: base_url + '/torino-channel'
+            },
+            {
+                title: 'FastSubIta',
+                link: base_url + '/fastsubita'
             }
         ]
     })
+})
+app.get('/fastsubita', async (req, res) => {
+    let list = {},
+        channel = {},
+        base_url = req.protocol + '://' + req.get('host')
+
+
+    let response = {
+        channel_name: 'FastSubIta',
+        generic_list: []
+    }
+    const readFile = await readDb('storage/fastsubita.db.json');
+    const items = JSON.parse(readFile)
+
+    items.sort((a, b) => {
+        if (a.message_date > b.message_date) return -1
+        if (a.message_date === b.message_date) return 0
+        if (a.message_date < b.message_date) return 1
+    }).forEach( item => {
+        let listItem = {
+            title: item.serie + " " + item.season + "x" + item.episode,
+            find_links: []
+        }
+
+        if (item.title) listItem.title += " \"" + item.title + "\""
+
+        for (const link of item.links)
+            listItem.find_links.push({url: link})
+
+
+        response.generic_list.push(listItem)
+    })
+
+
+    res.json(response);
 })
 
 app.get('/torino-channel', (req, res) => {
@@ -135,3 +258,19 @@ app.get('/torino-channel', (req, res) => {
         res.json(response);
     })
 })
+
+async function readDb(file) {
+    return new Promise((res, rej) => {
+        fs.readFile(file, 'utf8', (err, data) => {
+            err ? rej(err) : res(data)
+        });
+    })
+}
+
+async function writeFile(json, file) {
+    return new Promise((res, rej) => {
+        fs.writeFile(file, JSON.stringify(json, null, 2), "utf8", (err) => {
+            err ? rej(err) : res();
+        });
+    })
+}

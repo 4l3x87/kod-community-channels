@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "node test.js"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "got": "^11.3.0",
+    "nodemon": "^2.0.12",
     "tape": "^4.7.0"
   },
   "repository": {
@@ -29,5 +31,9 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "nodemonConfig": {
+    "ignore": ["test/*", "storage/*"],
+    "delay": 2500
+  }
 }
