@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "KOD Community Channels by 4l3x87",
   "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "description": "",
   "engines": {
     "node": "14.x"
   },
@@ -15,7 +15,12 @@
     "cheerio": "^1.0.0-rc.10",
     "ejs": "^3.1.5",
     "express": "^4.15.2",
-    "request": "^2.88.2"
+    "mtproto-storage-fs": "^0.3.1",
+    "node-fetch": "^2.6.1",
+    "prompt": "^1.0.0",
+    "ramda": "^0.25.0",
+    "request": "^2.88.2",
+    "telegram-mtproto": "^2.2.2"
   },
   "devDependencies": {
     "got": "^11.3.0",
@@ -33,7 +38,10 @@
   ],
   "license": "MIT",
   "nodemonConfig": {
-    "ignore": ["test/*", "storage/*"],
+    "ignore": [
+      "test/*",
+      "storage/*"
+    ],
     "delay": 2500
   }
 }
