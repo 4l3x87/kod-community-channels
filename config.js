@@ -16,7 +16,7 @@ const config = {
     dbfile: 'storage/db.json',
     chatdb: 'storage/chat.json',
     fastsubitadb: 'storage/fastsubita.db.json',
-    server: 'http://kod-community-channels.herokuapp.com/fastsubita',
+    server: 'https://kod-community-channels.pincopallinux.it/fastsubita',
     // server: 'http://localhost:5000/fastsubita',
     tv_torino_url: 'https://tv.torinofc.it'
 }
