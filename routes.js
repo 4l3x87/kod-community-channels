@@ -26,7 +26,7 @@ app.post('/fastsubita', async (req, res) => {
                     if (message.match(/https?:\/\//)) {
                         // console.log(message)
 
-                        const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/im);
+                        const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×|x)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/im);
                         const found = message.match(regex)
                         // console.log(found)
                         if (found) {
