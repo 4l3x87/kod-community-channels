@@ -15,6 +15,14 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 app.post('/fastsubita', async (req, res) => {
     let data = []
+
+    if (req.body.last_message_id) {
+        let last_message_id = parseInt(req.body.last_message_id)
+        db.updateLastMsgId(last_message_id)
+        return res.json({last_message_id: last_message_id})
+    }
+
+
     try {
         req.body.forEach(item => {
             // console.log(item)
@@ -144,7 +152,7 @@ app.get('/fastsubita', async (req, res) => {
 
             response.generic_list.push(listItem)
         })
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
 
