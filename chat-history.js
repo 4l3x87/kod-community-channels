@@ -37,7 +37,8 @@ const chatHistory = async (chat) => {
       limit
     })
 
-    messages = history.messages.filter(filterLastDay);
+    messages = history.messages
+    // messages = messages.filter(filterLastDay);
     full = full.concat(messages);
     messages.length > 0 && (offsetId = messages[0].id);
 
@@ -54,7 +55,7 @@ const chatHistory = async (chat) => {
   
   if (usersMsg.length>0){
     const done = await sendToServer(usersMsg)
-    printMessages(usersMsg)
+    // printMessages(usersMsg)
     console.log("saved to server: ",done)
     console.log("Last msg id ", messages[0].id)
   }

@@ -14,7 +14,7 @@ const app = express()
 app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 app.post('/fastsubita', async (req, res) => {
-    let data = []
+    let data = [], countMessages = 0
 
     if (req.body.last_message_id) {
         let last_message_id = parseInt(req.body.last_message_id)
@@ -25,47 +25,48 @@ app.post('/fastsubita', async (req, res) => {
 
     try {
         req.body.forEach(item => {
-            // console.log(item)
             if (item._ == 'message') {
-                item.message = item.message.replace(/ \n/g, '\n')
-                item.message = item.message.replace(/\n\n\nhttp/g, '\nhttp')
-                item.message = item.message.replace(/\n\nhttp/g, '\nhttp')
-                item.message.split("\n\n").forEach(message => {
-                    if (message.match(/https?:\/\//)) {
-                        // console.log(message)
-
-                        const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×|x)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/im);
-                        const found = message.match(regex)
-                        // console.log(found)
-                        if (found) {
-                            const links = message.matchAll(new RegExp(/^(https?:\/\/\S*)$/img))
-                            if (links) {
-                                let episode = {
-                                    message_id: item.id,
-                                    message_date: item.date,
-                                    serie: found.groups['serie'],
-                                    season: found.groups['season'],
-                                    episode: found.groups['episode'],
-                                    title: found.groups['title'] ? found.groups['title'] : null,
-                                    links: []
-                                }
-                                for (const link of links) {
-                                    episode.links.push(link[0])
-                                }
-                                data.push(episode)
-                            }
-                        } else {
-                            // console.log(item)
+                const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×|x)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/img);
+                const found = [...item.message.matchAll(regex)]
+                if(found){
+                    found.forEach((match, index) => {
+                        let message = ''
+                        let start = item.message.indexOf(match[0]);
+                        message = item.message.substr(start)
+                        if(found[index + 1]){
+                            let end = item.message.indexOf(found[index + 1][0]);
+                            message = item.message.substr(start, end)
                         }
+                        message = message.replace(/ \n/gi,'\n')
 
-                    }
-                })
+                        const links = [...message.matchAll(new RegExp(/^(https?:\/\/\S*)$/img))]
+                        // console.log(links)
+                        if (links) {
+                            let episode = {
+                                message_id: item.id,
+                                message_date: item.date,
+                                serie: match.groups['serie'],
+                                season: match.groups['season'],
+                                episode: match.groups['episode'],
+                                title: match.groups['title'] ? match.groups['title'] : null,
+                                links: []
+                            }
+                            for (const link of links) {
+                                if(!link[0].match(/netu_|kat_/i))
+                                    episode.links.push(link[0])
+                            }
+                            // console.log(episode)
+                            data.push(episode)
+                        }
+                    })
+                }
+                    // console.log(item.message)
             }
 
         })
-
+        countMessages = req.body.length
     } catch (e) {
-        // console.log(e)
+
     }
     // console.log(data)
 
@@ -99,7 +100,9 @@ app.post('/fastsubita', async (req, res) => {
 
     res.json({
         status: status,
-        data: data
+        countMessages: countMessages,
+        count: data.length,
+        // data: data
     })
 })
 
