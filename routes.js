@@ -26,8 +26,13 @@ app.post('/fastsubita', async (req, res) => {
     try {
         req.body.forEach(item => {
             if (item._ == 'message') {
-                const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)(?:X|×|x)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/img);
+                // if(item.message.indexOf('SWAT') === -1) return
+                // console.log(item)
+                // return
+                const regex = new RegExp(/^(?<serie>.*)\s(?<season>[0-9]+)\s?(?:X|×|x)(?<episode>[0-9]+)\s*(?:"(?<title>[^"]+)")?.*$/img);
                 const found = [...item.message.matchAll(regex)]
+                console.log(found)
+
                 if(found){
                     found.forEach((match, index) => {
                         let message = ''
