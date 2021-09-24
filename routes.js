@@ -257,6 +257,9 @@ app.get('/torino-channel', (req, res) => {
                         autoplay: true,
                         find_links: [
                             {
+                                patterns: [
+                                    "^(?:https?://).\\S+.m3u8$"
+                                ],
                                 url: videoUrl
                             }
                         ]
