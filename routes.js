@@ -255,7 +255,7 @@ app.get('/torino-channel', (req, res) => {
                         thumbnail: image ? config.tv_torino_url + image : undefined,
                         videolibrary: false,
                         autoplay: true,
-                        links: [
+                        find_links: [
                             {
                                 url: videoUrl
                             }
